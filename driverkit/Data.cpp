@@ -11,6 +11,8 @@
 #include <DriverKit/IOService.h>
 
 
+#include <NetworkingDriverkit/IOUserNetworkTypes.h>
+#include <NetworkingDriverkit/IOUserNetworkEthernet.h>
 #include <NetworkingDriverkit/IOUserNetworkPacketBufferPool.iig>
 #include <NetworkingDriverkit/IOUserNetworkRxSubmissionQueue.h>
 #include <NetworkingDriverkit/IOUserNetworkRxCompletionQueue.h>
@@ -47,6 +49,8 @@ struct Data_IVars {
     const IOUSBInterfaceDescriptor *interfaceDescriptorData;
     const IOUSBInterfaceDescriptor *interfaceDescriptorNoData;
 
+    IOUserNetworkMediaType mediaType[1];
+
 };
 
 #define VDBG(lvl,flg,fmt,args...)  {if (flg >= lvl) {IOLog(VDBG_ID "::%s " fmt "\n", __FUNCTION__, ##args); /*IOSleep(Sleep_Time);*/}}
@@ -61,28 +65,26 @@ struct Data_IVars {
 #define INFO(fmt,args...) LOG(OS_LOG_INFO, fmt, ##args)
 #define DEBUG(fmt,args...) LOG(OS_LOG_DEBUG, fmt, ##args)
 #define ERROR(fmt,args...) LOG(OS_LOG_ERROR, fmt, ##args)
-#define FAULT(fmt,args...) LOG(OS_LOG_ERROR, fmt, ##args)
+#define FAULT(fmt,args...) LOG(OS_LOG_FAULT, fmt, ##args)
 
 /* LOG Macros
  * This provides a compact test for the required calls to initialize the driver.
  * Three paradigms:
  *
  *      Test for false: if (_ISFALSE(b, SomeSystemCallReturningBool())) { failure }
- *      Test for error: if (_ISERROR(b, result, SomeSystemCallReturningkern_return_t())) { failure }
- *      Test for null:  if (_ISNULL(b, pointer, SomeSystemCallReturningPtr())) { failure }
+ *      Test for error: if (_ISERROR(result, SomeSystemCallReturningkern_return_t())) { failure }
+ *      Test for null:  if (_ISNULL(pointer, SomeSystemCallReturningPtr())) { failure }
  *
  * In the above result and pointer variables will have the result of the function call.
- *
- * The boolean b variable will have the result of the test for non-zero or non-null. 
  *
  * As a side-effect, the result of the expression will be logged:
  *
  *          .... com.belcarra.data::Start_Impl: Start(provider, SUPERDISPATCH) OK: 0x0
  */
 
-#define _ISFALSE(b, e)  (b = e, DLOG("%{public}s %{public}s", #e, b ? "True":"False"), !b)
-#define _ISNULL(b, r, e)  (b = (r = e), DLOG("%{public}s = %{public}s %{public}s %{public}p", #r, #e, b ? "OK":"NOT OK", r), !b)
-#define _ISERROR(b, r, e) (b = (r = e), DLOG("%{public}s = %{public}s %{public}s %x %{errno}x", #r, #e, !b ? "OK":"NOT ZERO", r, r), b) 
+#define _ISFALSE(b, e)  ((b = e), DLOG("%{public}s %{public}s", #e, b ? "True":"False"), !b)
+#define _ISNULL(r, e)   ((r = e), DLOG("%{public}s = %{public}s %{public}s %{public}p", #r, #e, (bool)r ? "OK":"NOT-OK", r), !(bool)r)
+#define _ISERROR(r, e)  ((r = e), DLOG("%{public}s = %{public}s %{public}s %x %{errno}x", #r, #e, !(bool)r ? "OK":"NON-ZERO", r, r), (bool)r) 
 
 
 struct IOUserNetworkMACAddress DataMacAddress = {
@@ -99,7 +101,7 @@ bool Data::init() {
      */
     bool b;
     if (_ISFALSE(b, super::init())) { return false; }
-    if (_ISNULL(b, ivars, IONewZero(Data_IVars, 1))) { return false; }
+    if (_ISNULL(ivars, IONewZero(Data_IVars, 1))) { return false; }
 
     return true;
 }
@@ -136,42 +138,48 @@ kern_return_t IMPL(Data, Start)
     DLOG("Start %s %s", __DATE__, __TIME__);
 
     ivars->provider = provider;
+    ivars->mediaType[0] = (IOUserNetworkMediaType) kIOUserNetworkMediaEthernetAuto;
+
     kern_return_t result;
 
-    bool b;
+    if (_ISERROR(result, Start(provider, SUPERDISPATCH))) { Stop(provider, SUPERDISPATCH); return result; }
 
-    if (_ISERROR(b, result, Start(provider, SUPERDISPATCH))) { Stop(provider, SUPERDISPATCH); return result; }
+    if (_ISNULL(ivars->hostInterface, OSDynamicCast(IOUSBHostInterface, provider))) return StartFailed(kIOReturnNotFound);
 
-    if (_ISNULL(b, ivars->hostInterface, OSDynamicCast(IOUSBHostInterface, provider))) return StartFailed(kIOReturnNotFound);
-
-#if 0
-	if (_ISERROR(b, result, IOUserNetworkPacketBufferPool::Create(this, "test pool", 16, 16, 1600, &ivars->pool))) 
+	if (_ISERROR(result, IOUserNetworkPacketBufferPool::Create(this, "test pool", 16, 16, 1600, &ivars->pool))) 
         return StartFailed(result); 
 
-	if (_ISERROR(b, result, IOUserNetworkRxSubmissionQueue::Create(ivars->pool, this, 8, 0, NULL, 
+	if (_ISERROR(result, IOUserNetworkRxSubmissionQueue::Create(ivars->pool, this, 8, 0, NULL, 
                     (IOUserNetworkRxSubmissionQueue **)&ivars->queues[RXSubmissionQ]))) 
 		return StartFailed(result); 
-	if (_ISERROR(b, result, IOUserNetworkRxCompletionQueue::Create(ivars->pool, this, 8, 0, NULL, 
+	if (_ISERROR(result, IOUserNetworkRxCompletionQueue::Create(ivars->pool, this, 8, 0, NULL, 
                     (IOUserNetworkRxCompletionQueue **)&ivars->queues[RXSubmissionQ]))) 
 		return StartFailed(result); 
     
-	if (_ISERROR(b, result, IOUserNetworkTxSubmissionQueue::Create(ivars->pool, this, 8, 0, NULL, 
+	if (_ISERROR(result, IOUserNetworkTxSubmissionQueue::Create(ivars->pool, this, 8, 0, NULL, 
                     (IOUserNetworkTxSubmissionQueue **)&ivars->queues[RXSubmissionQ]))) 
 		return StartFailed(result); 
-	if (_ISERROR(b, result, IOUserNetworkTxCompletionQueue::Create(ivars->pool, this, 8, 0, NULL, 
+
+	if (_ISERROR(result, IOUserNetworkTxCompletionQueue::Create(ivars->pool, this, 8, 0, NULL, 
                     (IOUserNetworkTxCompletionQueue **)&ivars->queues[RXSubmissionQ]))) 
 		return StartFailed(result); 
     
+    if (_ISERROR(result, ReportAvailableMediaTypes(ivars->mediaType, 1))) { /* do nothing */ }
 
-	if (_ISERROR(b, result, RegisterEthernetInterface(DataMacAddress, ivars->pool, ivars->queues, 4))) 
+    if (_ISERROR(result, SetSoftwareVlanSupport(false))) { /* do nothing */ }
+
+
+	if (_ISERROR(result, RegisterEthernetInterface(DataMacAddress, ivars->pool, ivars->queues, 4))) 
 		return StartFailed(result); 
 
-#endif
 
+
+#if 0
     /* XXX causes panic, but possibly only when IOClass is IOUserNetworkEthernet, not if IOUserService
      */
     DLOG("Calling RegisterService");
     RegisterService();
+#endif
     return kIOReturnSuccess;
 }
 
