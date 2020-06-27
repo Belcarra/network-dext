@@ -1,0 +1,218 @@
+panic(cpu 2 caller 0xffffff80187ed6a6): Kernel trap at 0xffffff801b251d35, type 14=page fault, registers:
+CR0: 0x000000008001003b, CR2: 0x0000000000000018, CR3: 0x000000001c7d0000, CR4: 0x00000000001626e0
+RAX: 0x0000000000000000, RBX: 0xffffff86b0dd8640, RCX: 0x0000000000000000, RDX: 0x0000000001000000
+RSP: 0xffffffa05aecbd50, RBP: 0xffffffa05aecbd50, RSI: 0xffffff86b0dd8640, RDI: 0xffffff86b0dd4870
+R8:  0xffffff86b37e2500, R9:  0x0000000000000008, R10: 0xffffff86b46ff340, R11: 0xffffff86b20a5000
+R12: 0xffffff86b0dd4870, R13: 0x0000000000000000, R14: 0xffffff86b0dd8640, R15: 0xffffff86b0dd4870
+RFL: 0x0000000000010286, RIP: 0xffffff801b251d35, CS:  0x0000000000000008, SS:  0x0000000000000010
+Fault CR2: 0x0000000000000018, Error code: 0x0000000000000000, Fault CPU: 0x2, PL: 0, VF: 1
+
+Backtrace (CPU 2), Frame : Return Address
+0xffffffa05aecb770 : 0xffffff80186be00d 
+0xffffffa05aecb7c0 : 0xffffff80187fbf03 
+0xffffffa05aecb800 : 0xffffff80187ed2da 
+0xffffffa05aecb850 : 0xffffff8018663b2f 
+0xffffffa05aecb870 : 0xffffff80186bd84d 
+0xffffffa05aecb990 : 0xffffff80186bdb43 
+0xffffffa05aecba00 : 0xffffff8018eb887a 
+0xffffffa05aecba70 : 0xffffff80187ed6a6 
+0xffffffa05aecbbf0 : 0xffffff80187ed38d 
+0xffffffa05aecbc40 : 0xffffff8018663b2f 
+0xffffffa05aecbc60 : 0xffffff801b251d35 
+0xffffffa05aecbd50 : 0xffffff801af2e4f0 
+0xffffffa05aecbda0 : 0xffffff801b251596 
+0xffffffa05aecbdd0 : 0xffffff8018decfca 
+0xffffffa05aecbe40 : 0xffffff8018decb78 
+0xffffffa05aecbef0 : 0xffffff8018debd0f 
+0xffffffa05aecbf50 : 0xffffff8018deeae6 
+0xffffffa05aecbfa0 : 0xffffff801866323e 
+      Kernel Extensions in backtrace:
+         com.apple.iokit.IONetworkingFamily(3.4)[203EF5B5-9B74-38D8-9D90-1668F21B4355]@0xffffff801af24000->0xffffff801af3bfff
+         com.apple.iokit.IOSkywalkFamily(1.0)[A8D78382-47D8-3124-AA00-9CB452C2DD16]@0xffffff801b250000->0xffffff801b287fff
+            dependency: com.apple.driver.mDNSOffloadUserClient(1.0.1b8)[666F7287-A791-3865-854A-A27A2FFEB908]@0xffffff801b17c000->0xffffff801b183fff
+            dependency: com.apple.iokit.IONetworkingFamily(3.4)[203EF5B5-9B74-38D8-9D90-1668F21B4355]@0xffffff801af24000->0xffffff801af3bfff
+
+Process name corresponding to current thread: kernel_task
+
+Mac OS version:
+20A4299v
+
+Kernel version:
+Darwin Kernel Version 20.0.0: Sat Jun 13 17:58:16 PDT 2020; root:xnu-7090.0.0.111.5~1/RELEASE_X86_64
+Kernel UUID: 8A20D5DC-6ED7-31BE-8E81-A5ADCBC358D7
+KernelCache slide: 0x0000000018400000
+KernelCache base:  0xffffff8018600000
+Kernel slide:      0x000000001840c000
+Kernel text base:  0xffffff801860c000
+__HIB  text base: 0xffffff8018500000
+System model name: Macmini7,1 (Mac-35C5E08120C7EEAF)
+System shutdown begun: NO
+Panic diags file available: YES (0x0)
+
+System uptime in nanoseconds: 52974631412
+last started kext at 19077507834: >!AUpstreamUserClient    3.6.8 (addr 0xffffff7fb5851000, size 16384)
+loaded kexts:
+>!AUpstreamUserClient    3.6.8
+>!AMCCSControl    1.14
+|SCSITaskUserClient    434
+>initioFWBridge    510.0.0
+>!SLynx    510.0.0
+>Oxford_Semi    510.0.0
+>LSI_FW_500    510.0.0
+>IOFireWireSerialBusProtocolSansPhysicalUnit    510.0.0
+>!AFireWire!S    510.0.0
+>AudioAUUC    1.70
+@filesystems.autofs    3.0
+@fileutil    20.036.15
+>!APlatformEnabler    2.7.0d0
+>AGPM    116
+>X86PlatformShim    1.0.0
+>!AHDAHardwareConfigDriver    283.15
+>!AHDA    283.15
+>!AGraphicsDevicePolicy    6.1.14
+@AGDCPluginDisplayMetrics    6.1.14
+>pmtelemetry    1
+>LuaHardwareAccess    1.0.16
+|IOUserEthernet    1.0.1
+>usb.!UUserHCI    1
+|IO!BSerialManager    8.0.0d35
+>!AFIVRDriver    4.1.0
+@Dont_Steal_Mac_OS_X    7.0.0
+>ACPI_SMC_PlatformPlugin    1.0.0
+>!AHV    1
+>!ADiskImages2    1
+>eficheck    1
+>!ALPC    3.1
+>!A!IHD5000Graphics    16.0.0
+>!AThunderboltSAT    1
+>!AThunderboltIP    4.0.1
+>!AFWOHCI    5.7.3
+>!A!IFramebufferAzul    16.0.0
+>!A!ISlowAdaptiveClocking    4.0.0
+|IO!BUSBDFU    8.0.0d35
+>!AIR!C    360
+>!AFileSystemDriver    3.0.1
+@filesystems.hfs.kext    552.0.0
+@BootCache    40
+>!AVirtIO    65
+@!AFSCompression.!AFSCompressionTypeZlib    1.0.0
+@!AFSCompression.!AFSCompressionTypeDataless    1.0.0d1
+@filesystems.apfs    1640.0.0
+>!ASDXC    1.7.7
+@private.KextAudit    1.0
+>!AEthernetBroadcomCaesar    1.0.16
+>AirPort.BrcmNIC    1400.1.1
+|!ABCM5701Ethernet    11.0.0
+>!AAHCIPort    346
+>!AACPIButtons    6.1
+>!ARTC    2.0
+>!AHPET    1.8
+>!ASMBIOS    2.1
+>!AACPIEC    6.1
+>!AAPIC    1.7
+@!ASystemPolicy    2.0.0
+@nke.applicationfirewall    310
+|EndpointSecurity    1
+>!ASMBus!C    1.0.18d1
+@plugin.IOAVBDiscoveryPlugin    900.10
+|IOFireWireSerialBusProtocolTransport    2.5.1
+|IOFireWireSBP2    4.4.2
+@kext.triggers    1.0
+>DspFuncLib    283.15
+@kext.OSvKernDSPLib    529
+>!AGraphicsControl    6.1.14
+>usb.cdc.eem    5.0.0
+>!UAudio    400.23
+|IOAVB!F    900.10
+>IOPlatformPluginLegacy    1.0.0
+>X86PlatformPlugin    1.0.0
+@!AGPUWrangler    6.1.14
+>!AHDA!C    283.15
+|IOHDA!F    283.15
+>IOPlatformPlugin!F    6.0.0d8
+|IONDRVSupport    582
+>!ASMBusPCI    1.0.14d1
+>!AThunderboltEDMSink    5.0.0
+>!AThunderboltDPOutAdapter    8.1.1
+@plugin.IOgPTPPlugin    900.8
+|IOEthernetAVB!C    1.1.0
+|IOFireWire!F    4.8.3
+|IOAccelerator!F2    439.31.1
+@!AGraphicsDeviceControl    6.1.14
+|IOGraphics!F    582
+|IOSlowAdaptiveClocking!F    1.0.0
+|Broadcom!BHost!CUSBTransport    8.0.0d35
+|IO!BHost!CUSBTransport    8.0.0d35
+|IO!BHost!CTransport    8.0.0d35
+>usb.IOUSBHostHIDDevice    1.2
+>!AThunderboltDPInAdapter    8.1.1
+>!AThunderboltDPAdapter!F    8.1.1
+>!AThunderboltPCIUpAdapter    4.0.9
+>!AThunderboltPCIDownAdapter    4.0.9
+>usb.cdc    5.0.0
+>usb.networking    5.0.0
+>usb.!UHostCompositeDevice    1.2
+>usb.!UHub    1.2
+|IOSurface    288
+@filesystems.hfs.encodings.kext    1
+|IOSerial!F    11
+|IOAudio!F    300.6
+@vecLib.kext    1.2.0
+>!AXsanScheme    3
+|IOAHCIBlock!S    332
+>!AThunderboltNHI    7.2.6
+|IOThunderbolt!F    9.2.7
+|IO80211!F    1200.12.2b1
+|IOSkywalk!F    1
+>corecapture    1.0.4
+>mDNSOffloadUserClient    1.0.1b8
+|IOAHCI!F    294
+>!A!ILpssGspi    3.0.60
+>usb.!UXHCIPCI    1.2
+>usb.!UXHCI    1.2
+>usb.!UHostPacketFilter    1.0
+|IOUSB!F    900.4.2
+>!AEFINVRAM    2.1
+>!AEFIRuntime    2.1
+|IOSMBus!F    1.1
+|IOHID!F    2.0.0
+$quarantine    4
+$sandbox    300.0
+@kext.!AMatch    1.0.0d1
+$!AImage4    3.0.0
+|IOTimeSync!F    900.8
+|IONetworking!F    3.4
+>DiskImages    493.0.0
+|IO!B!F    8.0.0d35
+|IOReport!F    47
+|IO!BPacketLogger    8.0.0d35
+|CoreAnalytics!F    1
+>!ASSE    1.0
+>!AKeyStore    2
+>!UTDM    510.0.0
+|IOUSBMass!SDriver    182
+|IOSCSIBlockCommandsDevice    434
+|IO!S!F    2.1
+|IOSCSIArchitectureModel!F    434
+>!AMobileFileIntegrity    1.0.5
+@kext.CoreTrust    1
+>!AFDEKeyStore    28.30
+>!AEffaceable!S    1.0
+>!ACredentialManager    1.0
+>KernelRelayHost    1
+|IOUSBHost!F    1.2
+>!UHostMergeProperties    1.2
+>usb.!UCommon    1.0
+>!ABusPower!C    1.0
+>!ASEPManager    1.0.1
+>IOSlaveProcessor    1
+>!AACPIPlatform    6.1
+>!ASMC    3.1.9
+|IOPCI!F    2.9
+|IOACPI!F    1.4
+>watchdog    1
+@kec.pthread    1
+@kec.corecrypto    1.0
+@kec.Libm    1
+
+

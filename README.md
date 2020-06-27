@@ -1,6 +1,11 @@
 # network-dext
 
 This is a minimal DriverKit project that builds a NetworkingDriverKit extension that panics MacOS.
+
+See the *problemreports* directory for sample problemreports generated after system reboot.
+
+This is the Start() function.
+
 ```
 kern_return_t IMPL(Data, Start) 
 {
@@ -19,4 +24,5 @@ kern_return_t IMPL(Data, Start)
     return kIOReturnSuccess;
 }
 ```
+
 
