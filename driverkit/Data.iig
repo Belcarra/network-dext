@@ -1,0 +1,28 @@
+#ifndef data_h
+#define data_h
+
+#include <Availability.h>
+#include <DriverKit/IOService.iig>
+#include <NetworkingDriverkit/IOUserNetworkTypes.h>
+#include <NetworkingDriverKit/IOUserNetworkEthernet.iig>
+#include <USBDriverKit/IOUSBHostInterface.iig>
+#include <USBDriverKit/IOUSBHostInterface.iig>
+
+//class Data: public IOService
+class Data: public IOUserNetworkEthernet
+{
+
+public:
+    virtual bool init() override;
+    virtual kern_return_t Start(IOService *provider) override;
+    virtual kern_return_t Stop(IOService *provider) override;
+    virtual void free() override;
+
+    virtual void ReleaseResources(void);
+    virtual kern_return_t StartFailed(kern_return_t result);
+
+protected:
+
+};
+
+#endif /* data_h */

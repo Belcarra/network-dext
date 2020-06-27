@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>        <string>$(DEVELOPMENT_LANGUAGE)</string>
+    <key>CFBundleExecutable</key>               <string>$(EXECUTABLE_NAME)</string>
+    <key>CFBundleIdentifier</key>               <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+    <key>CFBundleInfoDictionaryVersion</key>    <string>6.0</string>
+    <key>CFBundleName</key>                     <string>$(PRODUCT_NAME)</string>
+    <key>CFBundlePackageType</key>              <string>$(PRODUCT_BUNDLE_PACKAGE_TYPE)</string>
+    <key>CFBundleShortVersionString</key>       <string>1.0</string>
+    <key>CFBundleVersion</key>                  <string>1</string>
+    <key>IOKitPersonalities</key>
+    <dict>
+        <key>TESTUSBNET</key>
+        <dict>
+            <key>CFBundleIdentifier</key>       <string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+
+            <key>IOClass</key>                  <string>IOUserNetworkEthernet</string>
+            <key>CFBundleIdentifierKernel</key> <string>com.apple.iokit.IOSkywalkFamily</string>
+
+            <!-- <key>IOClass</key>                  <string>IOUserNetworkEthernet</string> -->
+            <!-- <key>IOClass</key>                  <string>IOUserService</string> -->
+
+            <key>IOProviderClass</key>          <string>IOUSBHostInterface</string>
+            <key>IOUserClass</key>              <string>Data</string>
+            <key>IOUserServerName</key>         <string>com.belcarra.driverkit.testusbnet</string>
+
+            <key>IOProbeScore</key>             <integer>210000</integer>
+            <key>idVendor</key>                 <integer>0x15ec</integer>
+            <key>idProduct</key>                <integer>0xf101</integer>
+            <key>bConfigurationValue</key>      <integer>0x1</integer>
+            <key>bInterfaceNumber</key>         <integer>0x0</integer>
+            <key>UserClientProperties</key>
+            <dict>
+                <key>IOClass</key>                  <string>IOUserUserService</string>
+                <key>IOUserClass</key>              <string>com.belcarra.VNet</string>
+            </dict>
+        </dict>
+    </dict>
+    <key>OSBundleUsageDescription</key>
+    <string>USB Network driver</string>
+</dict>
+</plist>
